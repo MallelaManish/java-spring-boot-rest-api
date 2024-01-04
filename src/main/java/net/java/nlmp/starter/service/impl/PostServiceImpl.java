@@ -1,10 +1,9 @@
 package net.java.nlmp.starter.service.impl;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -21,9 +20,11 @@ import net.java.nlmp.starter.service.PostService;
 public class PostServiceImpl implements PostService {
 
 	private PostRepository postRepository;
+	private ModelMapper mapper;
 
-	public PostServiceImpl(PostRepository postRepository) {
+	public PostServiceImpl(PostRepository postRepository, ModelMapper mapper) {
 		this.postRepository = postRepository;
+		this.mapper = mapper;
 	}
 
 	@Override
@@ -71,20 +72,26 @@ public class PostServiceImpl implements PostService {
 	}
 
 	private PostDto maptoDto(Post post) {
-		PostDto resposeDto = new PostDto();
-		resposeDto.setId(post.getId());
-		resposeDto.setTitle(post.getTitle());
-		resposeDto.setDescription(post.getDescription());
-		resposeDto.setContent(post.getContent());
-		return resposeDto;
+		
+		PostDto postDto = mapper.map(post, PostDto.class);
+//		
+//		PostDto resposeDto = new PostDto();
+//		resposeDto.setId(post.getId());
+//		resposeDto.setTitle(post.getTitle());
+//		resposeDto.setDescription(post.getDescription());
+//		resposeDto.setContent(post.getContent());
+		return postDto;
 	}
 
 	private Post maptoEntity(PostDto postDto) {
-		Post resposeEnitiy = new Post();
-		resposeEnitiy.setId(postDto.getId());
-		resposeEnitiy.setTitle(postDto.getTitle());
-		resposeEnitiy.setDescription(postDto.getDescription());
-		resposeEnitiy.setContent(postDto.getContent());
+		
+		Post resposeEnitiy = mapper.map(postDto, Post.class);
+		
+//		Post resposeEnitiy = new Post();
+//		resposeEnitiy.setId(postDto.getId());
+//		resposeEnitiy.setTitle(postDto.getTitle());
+//		resposeEnitiy.setDescription(postDto.getDescription());
+//		resposeEnitiy.setContent(postDto.getContent());
 		return resposeEnitiy;
 
 	}

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import jakarta.validation.Valid;
 import net.java.nlmp.starter.payload.PostDto;
 import net.java.nlmp.starter.payload.PostResponse;
 import net.java.nlmp.starter.service.PostService;
@@ -31,7 +32,7 @@ public class PostController {
 	}
 
 	@PostMapping
-	public PostDto createpost(@RequestBody PostDto postDto) {
+	public PostDto createpost(@Valid @RequestBody  PostDto postDto) {
 		return this.postService.createPost(postDto);
 	}
 
@@ -50,7 +51,7 @@ public class PostController {
 	}
 
 	@PutMapping("/{postId}")
-	public ResponseEntity<PostDto> updatePost(@RequestBody PostDto postDto, @PathVariable(name = "postId") long id) {
+	public ResponseEntity<PostDto> updatePost(@Valid @RequestBody PostDto postDto, @PathVariable(name = "postId") long id) {
 
 		return new ResponseEntity<>(this.postService.updatepost(postDto, id), HttpStatus.OK);
 

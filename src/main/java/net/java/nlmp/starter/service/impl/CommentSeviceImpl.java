@@ -3,6 +3,7 @@ package net.java.nlmp.starter.service.impl;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -20,11 +21,13 @@ public class CommentSeviceImpl implements CommentService {
 
 	private CommentRepository commentRepository;
 	private PostRepository postRepository;
+	private ModelMapper mapper;
 
-	public CommentSeviceImpl(CommentRepository commentRepository, PostRepository postRepository) {
+	public CommentSeviceImpl(CommentRepository commentRepository, PostRepository postRepository, ModelMapper mapper) {
 		// TODO Auto-generated constructor stub
 		this.commentRepository = commentRepository;
 		this.postRepository = postRepository;
+		this.mapper = mapper;
 	}
 
 	@Override
@@ -42,19 +45,21 @@ public class CommentSeviceImpl implements CommentService {
 	}
 
 	private CommentDto mapToDTO(Comment comment) {
-		CommentDto commentDto = new CommentDto();
-		commentDto.setId(comment.getId());
-		commentDto.setName(comment.getName());
-		commentDto.setEmail(comment.getEmail());
-		commentDto.setBody(comment.getBody());
+		CommentDto commentDto = mapper.map(comment, CommentDto.class);
+//		CommentDto commentDto = new CommentDto();
+//		commentDto.setId(comment.getId());
+//		commentDto.setName(comment.getName());
+//		commentDto.setEmail(comment.getEmail());
+//		commentDto.setBody(comment.getBody());
 		return commentDto;
 	}
 
 	private Comment maptoEntity(CommentDto commentDto) {
-		Comment comment = new Comment();
-		comment.setName(commentDto.getName());
-		comment.setEmail(commentDto.getEmail());
-		comment.setBody(commentDto.getBody());
+		Comment comment = mapper.map(commentDto, Comment.class);
+//		Comment comment = new Comment();
+//		comment.setName(commentDto.getName());
+//		comment.setEmail(commentDto.getEmail());
+//		comment.setBody(commentDto.getBody());
 		return comment;
 
 	}
@@ -114,9 +119,9 @@ public class CommentSeviceImpl implements CommentService {
 		if (!comment.getPost().getId().equals(post.getId())) {
 			throw new BlogAPIException(HttpStatus.BAD_REQUEST, "Post comment does not belongs to any post");
 		}
-		
+
 		commentRepository.delete(comment);
-		
+
 	}
 
 }
